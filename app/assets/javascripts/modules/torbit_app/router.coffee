@@ -3,7 +3,6 @@ require.define 'torbit_app/router': (exports, require, module) ->
   module.exports = class TorbitAppRouter extends Marionette.AppRouter
     appRoutes:
       '': 'home'
-      'login': 'login'
       'home': 'home'
       'userinfo': 'userInfo'
       'siteconfigs': 'siteConfigs'
