@@ -1,4 +1,20 @@
 == README
+INSTALLATION INSTRUCTIONS:
+INSTALL RUBY
+
+INSTALL GEMS 
+  bundle
+ 
+RAILS S -p 8080
+
+loads the single page app with all the assets compiled. 
+
+Open chrome with web security disabled to overcome same origin protection failures during testing
+'open -a Google\ Chrome --args --disable-web-security'
+
+
+
+
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
