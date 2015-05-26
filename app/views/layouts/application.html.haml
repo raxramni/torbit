@@ -1,0 +1,13 @@
+!!!
+%html
+  %head
+    %title TorBit Assignment
+    %meta{:content => "initial-scale=1.0, user-scalable=no", :name => "viewport"}
+    = csrf_meta_tags
+    = stylesheet_link_tag    "vendor"
+    = stylesheet_link_tag    "application", media: "all"
+    = javascript_include_tag "vendor"
+    = javascript_include_tag "application"
+    = yield(:head)
+  %body
+    = content_for?(:layout_application) && yield(:layout_application) || yield

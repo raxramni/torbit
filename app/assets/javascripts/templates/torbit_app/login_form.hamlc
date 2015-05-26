@@ -1,0 +1,18 @@
+.notifications.alert.alert-danger
+.row
+  .col-md-6.col-md-offset-3
+    .panel.panel-login
+      .panel-heading
+        %hr
+      .panel-body
+        .row
+          .col-lg-12
+            %form.login{role: 'form'}
+              .form-group
+                %input.email.form-control{name: 'email', placeholder: 'Username', type: 'email'}
+              .form-group
+                %input.password.form-control{name: 'password', placeholder: 'Password', type: 'password'}
+              .form-group
+                .row
+                  .col-sm-6.col-sm-offset-3
+                    %input.login-submit.form-control.btn.btn-primary{type: 'submit', value: 'Log In'}

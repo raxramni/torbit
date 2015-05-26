@@ -1,0 +1,7 @@
+%h1 hello
+:coffeescript
+  $ ->
+    $.ajaxSetup({headers: {"X-User-Id": "767b2d6e767e8c434288e26792b7612c1c1bbb3f"}})
+    $el = $('script:last').parent()
+    TorbitApp = require 'torbit_app/main'
+    TorbitApp.start({$el})

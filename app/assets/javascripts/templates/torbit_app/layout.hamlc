@@ -1,0 +1,15 @@
+%nav.navbar.navbar-inverse
+  .container-fluid
+    .navbar-header
+      %a.navbar-brand{href: '#'}TorBit Example
+    .collapse.navbar-collapse
+      %ul.nav.navbar-nav
+        %li.active
+          %a{href: '#home'}Home
+        %li.active
+          %a{href: '#login'}Login
+        %li
+          %a{href: '#userinfo'}User Info
+        %li
+          %a{href: '#siteconfigs'}Site Configs
+.main-box
