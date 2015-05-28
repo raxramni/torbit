@@ -33,8 +33,7 @@ require.define 'torbit_app/auth': (exports, require, module) ->
 
     showLoginPage: (errors=null)->
       region= @channel.reqres.request('app:main_region')
-      #@_loginView= new Auth.LoginView() if (!@_loginView? || @_loginView.isDestroyed)
-      @_loginView = new Auth.LoginView() unless @_loginView?.isDestroyed
+      @_loginView = new Auth.LoginView() if !@_loginView? || @_loginView.isDestroyed
       @listenTo @_loginView, 'authenticate', @serverAuthenticate
       region.show(@_loginView)
       @_loginView.showErrors(errors) if errors?

@@ -83,14 +83,20 @@ require.define 'torbit_app/main': (exports, require, module) ->
     siteConfigs: ->
       @layout.navHighlight('siteconfigs')
       @siteConfigsController?.destroy()
-      @siteConfigsController = new SiteConfigs.Controller({mountRegion: @layout.main, @channel})
-      @siteConfigsController.start()
+      if @authController.getAuthInfo()?
+        @siteConfigsController = new SiteConfigs.Controller({mountRegion: @layout.main, @channel})
+        @siteConfigsController.start()
+      else
+        @channel.commands.execute "app:router:navigate", 'login'
 
     userAccounts: ->
       @layout.navHighlight('useraccounts')
       @userAccountsController?.destroy()
-      @userAccountsController = new UserAccounts.Controller({mountRegion: @layout.main, @channel})
-      @userAccountsController.start()
+      if @authController.getAuthInfo()?
+        @userAccountsController = new UserAccounts.Controller({mountRegion: @layout.main, @channel})
+        @userAccountsController.start()
+      else
+        @channel.commands.execute "app:router:navigate", 'login'
 
     login: ->
       @layout.navHighlight('login')

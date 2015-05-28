@@ -74,10 +74,8 @@ require.define 'torbit_app/user_accounts/main': (exports, require, module) ->
       @model.save()
         .done \
           =>
-            alert 'saved!'
           ,
           (failureResp) =>
-            alert 'failed!'
             if failureResp.status == 401
               @channel.commands.execute 'app:user:authFailed', 'Authorization Failed. Please Login!'
             else
@@ -90,11 +88,9 @@ require.define 'torbit_app/user_accounts/main': (exports, require, module) ->
       @model.destroy({url: destroyURL, wait: true, dataType: 'text'})
         .done(
           (successResp) =>
-            alert 'deleted!'
           ,
           (failureResp) =>
             @model.idAttribute=null
-            alert 'failed!'
             if failureResp.status == 401
               @channel.commands.execute 'app:user:authFailed', 'Authorization Failed. Please Login!'
             else
@@ -123,6 +119,8 @@ require.define 'torbit_app/user_accounts/main': (exports, require, module) ->
       @mountRegion.show(@layout)
 
     onDestroy: ->
+      @userAccountsView?.destroy()
+      @newUserView?.destroy()
       @layout?.destroy()
 
     _onShow: ->
@@ -137,7 +135,6 @@ require.define 'torbit_app/user_accounts/main': (exports, require, module) ->
       tempModel.save({type: 'post', wait: true})
         .done \
           =>
-            alert 'saved'
             @userData.add(tempModel)
             @newUserView.resetFields()
         ,
@@ -163,6 +160,3 @@ require.define 'torbit_app/user_accounts/main': (exports, require, module) ->
               @channel.commands.execute 'app:user:authFailed', 'Authorization Failed. Please Login!'
             else
               @layout.showErrors(failureResp.responseText)
-    onDestroy: ->
-      @userAccountsView?.destroy()
-      @newUserView?.destroy()
