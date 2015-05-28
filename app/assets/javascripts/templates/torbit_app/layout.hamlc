@@ -4,12 +4,15 @@
       %a.navbar-brand{href: '#'}TorBit Example
     .collapse.navbar-collapse
       %ul.nav.navbar-nav
-        %li.active
+        %li.home
           %a{href: '#home'}Home
-        %li.active
-          %a{href: '#login'}Login
-        %li
-          %a{href: '#userinfo'}User Info
-        %li
+        %li.useraccounts
+          %a{href: '#useraccounts'}User Accounts
+        %li.
           %a{href: '#siteconfigs'}Site Configs
+        %li.userinfo
+          %a{href: '#userinfo'}Your Account
+
+.notifications.alert.alert-danger
+
 .main-box

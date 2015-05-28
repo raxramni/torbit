@@ -1,0 +1,13 @@
+.notifications.alert.alert-danger
+%form.form-inline{:role => "form"}
+  .form-group
+    %label{for: 'email'} Email:
+    %input.email.form-control{placeholder: 'Enter email', type: 'email', value: @email}
+  .form-group
+    %label{for: 'name'} Name:
+    %input.name.form-control{placeholder: 'Enter Full Name', type: 'name', value: @name}
+  .form-group
+    %label{for: 'admin'} Admin:
+    %input.admin.form-control{type: 'checkbox', checked: @admin}
+  %button.btn.btn-primary.save-user Save
+  %button.btn.btn-danger.delete-user Delete

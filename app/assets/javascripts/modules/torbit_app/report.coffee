@@ -3,13 +3,30 @@ require.define 'torbit_app/report': (exports, require, module) ->
 
   LoadingView       = require 'torbit_app/loading_view'
 
+  class Report.Layout extends Marionette.LayoutView
+    template: JST['torbit_app/report/layout']
+    className: 'torbit-report'
+    regions:
+      graphRegion: '.graph-region'
+    ui:
+      graphRegion: '.graph-region'
+      notifications: '.notifications'
+    onShow: ->
+      @ui.notifications.hide()
+    showErrors: (errors) ->
+      @ui.notifications.text(errors).show()
+
   class Report.Controller extends Marionette.Controller
-    initialize: ({@channel}) ->
+    initialize: ({@mountRegion, @channel}) ->
       @layout = new Report.Layout()
-      @listenTo @layout, 'show', @_onShow
+      @listenTo @layout, 'destroy', @destroy
+      @listenTo @layout, 'show',    @_onShow
+    
     start: ->
-      @region= @channel.reqres.request('app:main_region')
-      @region.show(@layout)
+      @mountRegion.show(@layout)
+
+    onDestroy: ->
+      @layout?.destroy()
 
     _onShow: ->
       @_fetchReportData()
@@ -27,12 +44,14 @@ require.define 'torbit_app/report': (exports, require, module) ->
         @loadingView.destroy()
       .done \
         (successResp) =>
-          chartView = new Report.ChartView(data: successResp?.data)
-          @layout.graphRegion.show(chartView)
+          @chartView = new Report.ChartView(data: successResp?.data)
+          @layout.graphRegion?.show(@chartView)
         ,
         (failureResp) =>
-          alert 'error'
-          @layout.showErrors(failureResp)
+          if failureResp.status == 401
+            @channel.commands.execute 'app:user:authFailed', 'Authorization Failed. Please Login!'
+          else
+            @layout.showErrors(failureResp.responseText)
 
   class Report.ChartView extends Marionette.ItemView
     className: 'chart'
@@ -42,6 +61,8 @@ require.define 'torbit_app/report': (exports, require, module) ->
         arr[0]= arr[0]/1000000 if arr[0]?
     onShow: ->
       @_initCharts()
+    onDestroy: ->
+      @chart?.destroy()
     _initCharts: ->
       highchartsOptions = @_prepareHighchartsOptions()
       @chart = new Highcharts.Chart(highchartsOptions)
@@ -61,15 +82,3 @@ require.define 'torbit_app/report': (exports, require, module) ->
         data: @data
       ]
 
-  class Report.Layout extends Marionette.LayoutView
-    template: JST['torbit_app/report/layout']
-    className: 'torbit-report'
-    regions:
-      graphRegion: '.graph-region'
-    ui:
-      graphRegion: '.graph-region'
-      notifications: '.notifications'
-    onShow: ->
-      @ui.notifications.hide()
-    showErrors: (errors) ->
-      @ui.notifications.text(errors).show()

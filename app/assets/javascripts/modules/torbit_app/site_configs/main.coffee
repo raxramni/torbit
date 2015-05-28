@@ -10,7 +10,7 @@ require.define 'torbit_app/site_configs/main': (exports, require, module) ->
     ui:
       mainRegion: '.main-region'
       notifications: '.notifications'
-    onShow: ->
+    onRender: ->
       @ui.notifications.hide()
     showErrors: (errors) ->
       console.log @ui.notifications

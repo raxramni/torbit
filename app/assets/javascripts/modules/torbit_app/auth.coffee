@@ -9,7 +9,8 @@ require.define 'torbit_app/auth': (exports, require, module) ->
       if @getAuthInfo()?
         @channel.commands.execute 'app:user:authenticated', {user: @_session.user, token: @_session.token}
       else
-        @showLoginPage()
+        @channel.commands.execute 'app:user:deAuthenticated'
+        #@showLoginPage()
    
     onDestroy: ->
       @_loginView?.destroy()
@@ -32,21 +33,21 @@ require.define 'torbit_app/auth': (exports, require, module) ->
 
     showLoginPage: (errors=null)->
       region= @channel.reqres.request('app:main_region')
-      @_loginView= new Auth.LoginView()
+      #@_loginView= new Auth.LoginView() if (!@_loginView? || @_loginView.isDestroyed)
+      @_loginView = new Auth.LoginView() unless @_loginView?.isDestroyed
       @listenTo @_loginView, 'authenticate', @serverAuthenticate
       region.show(@_loginView)
       @_loginView.showErrors(errors) if errors?
 
     showUserPage: ->
+      auth = @getAuthInfo()
+      @channel.commands.execute 'app:user:deAuthenticated' unless auth?
       region= @channel.reqres.request('app:main_region')
-      model = new Backbone.Model(@getAuthInfo().user)
+      model = new Backbone.Model(auth.user)
+      @_userView.destroy() if @_userView?
       @_userView=  new Auth.UserInfoView({model})
       @listenTo @_userView, 'deAuthenticate', @deAuthenticate
       region.show(@_userView)
-
-    logout: ->
-      #shoutout loggedout on the channel --- the main controller destroys everything and 
-      #delete the cookie and redirect to login page 
 
     serverAuthenticate: ({username, password}) ->
       url = 'http://166.78.104.55/login'
@@ -61,19 +62,13 @@ require.define 'torbit_app/auth': (exports, require, module) ->
           expDate = new Date()
           minutes = 30
           expDate.setTime(expDate.getTime() + (minutes * 60 * 1000))
-          #$.cookie('torbit.com', JSON.stringify(successResp), {expires: expDate, path: '/'})
           @_session = successResp
           sessionStorage.setItem('authInfo', JSON.stringify(@_session))
-          #$.cookie('auth', @_session.token)
-          #$.cookie('user', JSON.stringify(@_session.user))
-          #document.cookie="user="+@_session.token
           @channel.commands.execute 'app:user:authenticated', {user: @_session.user, token: @_session.token}
         ,
         (failureResp) =>
           @_session = null
-          console.log failureResp
-          alert 'error'
-          @showLoginPage(failureResp)
+          @channel.commands.execute 'app:user:authFailed', 'Authentication Failed: ' + failureResp?.statusText
 
     serverDeAuthenticate: ({username}) ->
       #to be implemented
@@ -84,7 +79,7 @@ require.define 'torbit_app/auth': (exports, require, module) ->
       'click .logout-submit': 'logout'
     ui:
       notifications: '.notifications'
-    onRender: ->
+    onShow: ->
       @ui.notifications.hide()
     showErrors: (errors) ->
       @ui.notifications.text(errors).show()

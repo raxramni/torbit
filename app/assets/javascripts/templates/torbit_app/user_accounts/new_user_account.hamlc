@@ -1,0 +1,16 @@
+%h4 Add a new User:
+.notifications.alert.alert-danger
+%form.form-inline{:role => "form"}
+  .form-group
+    %label{for: 'email'} Email:
+    %input.email.form-control{placeholder: 'Enter email', type: 'email', name: 'email', value: @email}
+  .form-group
+    %label{for: 'name'} Name:
+    %input.name.form-control{placeholder: 'Enter Full Name', name:'name', value: @name}
+  .form-group
+    %label{for: 'name'} Password:
+    %input.password.form-control{placeholder: 'Enter Full Name', name: 'password', type: 'password', value: @password}
+  .form-group
+    %label{for: 'admin'} Admin:
+    %input.admin.form-control{type: 'checkbox', name: 'admin', checked: @admin}
+  %button.btn.btn-primary.save-user{type: 'submit'} Add

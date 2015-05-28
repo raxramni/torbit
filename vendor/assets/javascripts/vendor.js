@@ -9,8 +9,9 @@
 //= require underscore
 //= require backbone
 //= require backbone-deferred-q
-//= require backbone.marionette
 //= require backbone.wreqr
+//= require backbone.babysitter
+//= require backbone.marionette
 //= require backbone.syphon
 //= require backbone-validation
 //= require backbone.stickit/backbone.stickit
